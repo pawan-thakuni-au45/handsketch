@@ -1,10 +1,13 @@
 
 import express from "express"
 import {JWT_SECRET} from "@repo/backend-common/config"
-import {signInuser, userCreate} from "@repo/common/types"
+import {signInuser, userCreate,room} from "@repo/common/types"
 
 const app=express()
-  const data=userCreate.safeParse(req.body)
+  
+
+app.use("/register",(req,res)=>{
+    const data=userCreate.safeParse(req.body)
     if(!data){
         res.json({
             message:"incorrect inputs"
@@ -12,7 +15,9 @@ const app=express()
         return ;
     }
 
-app.use("/register",(req,res)=>{
+    UserActivation.creae({
+
+    })
 
 
 
