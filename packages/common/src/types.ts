@@ -3,14 +3,14 @@
 import {z} from "zod"
 
 export const userCreate=z.object({
-    username:z.string().min(3).max(10),
-    password:z.string().min(3).max(10),
-    name:z.string().min(3).max(10)
+    email:z.string().min(3),
+    password:z.string(),
+    name:z.string()
 })
 
 export const signInuser=z.object({
-    username:z.string().min(3).max(10),
-    password:z.string().min(3).max(10)
+    email:z.string().min(3),
+    password:z.string()
 })
 
 export const room=z.object({
