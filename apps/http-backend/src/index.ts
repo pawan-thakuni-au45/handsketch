@@ -21,12 +21,17 @@ app.post("/signup", async (req, res) => {
         })
         return;
     }
+
+    const hashedPassword=await bcrypt.hash(parsedData.data?.password,10)
+   
+
+
     try {
         const user = await prismaClient.user.create({
             data: {
                 email: parsedData.data?.email,
                 // TODO: Hash the pw
-                password: parsedData.data.password,
+                password: hashedPassword,
                 name: parsedData.data.name
             }
         })
@@ -49,11 +54,15 @@ app.post("/signin", async (req, res) => {
         return;
     }
 
+   
+
     // TODO: Compare the hashed pws here
     const user = await prismaClient.user.findFirst({
+    
+
         where: {
             email: parsedData.data.email,
-            password: parsedData.data.password
+            
         }
     })
 
@@ -63,6 +72,13 @@ app.post("/signin", async (req, res) => {
         })
         return;
     }
+    const matchPassword=await bcrypt.compare(parsedData.data?.password,user.password)
+    if(!matchPassword){
+        res.json({
+            message:"you hae entered wrong password"
+        })
+    }
+
 
     const token = jwt.sign({
         userId: user?.id
