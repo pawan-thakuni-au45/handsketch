@@ -10,6 +10,10 @@ export function userMiddlewear(req:Request,res:Response,next:NextFunction){
         //@ts-ignore
         req.userId=decode.userId
         next()
+    }else {
+        res.status(403).json({
+            message: "Unauthorized"
+        })
     }
 
 }

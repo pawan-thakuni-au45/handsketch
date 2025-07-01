@@ -1,23 +1,25 @@
 
 import { WebSocketServer,WebSocket } from "ws";
-const wss=new WebSocketServer({port:8000})
+
 import {JWT_SECRET} from "@repo/backend-common/config"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { parse } from "path";
 import {prismaClient} from "@repo/db/client"
 
-//state management using global variable which is not a good way
+//state management usiconst 
+const wss = new WebSocketServer({ port: 8000 })
 
 interface User{
-    ws:WebSocket
-    userId:string,
+    ws:WebSocket,
     rooms:string [],
+    userId:string
+    
     
 }
 
-const users:User[]=[]
+const users:User[]=[];
 
-function chekUser(token:string):string | null{
+function checkUser(token:string):string | null{
     try{
     const decode=jwt.verify(token,JWT_SECRET)
     if(typeof decode=="string"){
@@ -34,15 +36,15 @@ function chekUser(token:string):string | null{
 }
 }
 
-wss.on("connection",function connection(ws,request){
+wss.on('connection',function connection(ws,request){
     const url=request.url  //ws:localhost:8000?token=88huihuj
     if(!url){
         return
 
     }
     const queryparams=new URLSearchParams(url.split('?')[1])
-    const token=queryparams.get('token') || ""
-   const userId=chekUser(token)
+    const token=queryparams.get('token') || "";
+   const userId=checkUser(token)
    if(userId ==null){
     ws.close()
     return 
@@ -77,6 +79,7 @@ wss.on("connection",function connection(ws,request){
          if(parseData.type==="chat"){
             const roomId=parseData.roomId
             const message=parseData.message
+            console.log(roomId,message);
 
             await prismaClient.chat.create({
         data: {
@@ -85,6 +88,7 @@ wss.on("connection",function connection(ws,request){
           userId
         }
       });
+      console.log(data);
 
             users.forEach(user=>{
                if( user.rooms.includes(roomId)){
