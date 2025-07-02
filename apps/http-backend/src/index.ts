@@ -1,14 +1,14 @@
 
 import express from "express"
-import {JWT_SECRET} from "@repo/backend-common/config"
-import {signInuser, userCreate,room} from "@repo/common/types"
-import {prismaClient} from "@repo/db/client"
+import { JWT_SECRET } from "@repo/backend-common/config"
+import { signInuser, userCreate, room } from "@repo/common/types"
+import { prismaClient } from "@repo/pridb/client"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { userMiddlewear } from "./usermiddlewear"
 
 
-const app=express()
+const app = express()
 app.use(express.json())
 
 app.post("/signup", async (req, res) => {
@@ -22,8 +22,8 @@ app.post("/signup", async (req, res) => {
         return;
     }
 
-    const hashedPassword=await bcrypt.hash(parsedData.data?.password,10)
-   
+    const hashedPassword = await bcrypt.hash(parsedData.data?.password, 10)
+
 
 
     try {
@@ -38,7 +38,7 @@ app.post("/signup", async (req, res) => {
         res.json({
             userId: user.id
         })
-    } catch(e) {
+    } catch (e) {
         res.status(411).json({
             message: "User already exists with this username"
         })
@@ -54,15 +54,15 @@ app.post("/signin", async (req, res) => {
         return;
     }
 
-   
+
 
     // TODO: Compare the hashed pws here
     const user = await prismaClient.user.findFirst({
-    
+
 
         where: {
             email: parsedData.data.email,
-            
+
         }
     })
 
@@ -72,10 +72,10 @@ app.post("/signin", async (req, res) => {
         })
         return;
     }
-    const matchPassword=await bcrypt.compare(parsedData.data?.password,user.password)
-    if(!matchPassword){
+    const matchPassword = await bcrypt.compare(parsedData.data?.password, user.password)
+    if (!matchPassword) {
         res.json({
-            message:"you hae entered wrong password"
+            message: "you hae entered wrong password"
         })
     }
 
@@ -90,7 +90,7 @@ app.post("/signin", async (req, res) => {
 })
 
 app.post("/room", userMiddlewear, async (req, res) => {
-    const parsedData =room.safeParse(req.body);
+    const parsedData = room.safeParse(req.body);
     if (!parsedData.success) {
         res.json({
             message: "Incorrect inputs"
@@ -109,9 +109,9 @@ app.post("/room", userMiddlewear, async (req, res) => {
         })
 
         res.json({
-            roomId:room.id
+            roomId: room.id
         })
-    } catch(e) {
+    } catch (e) {
         res.status(411).json({
             message: "Room already exists with this name"
         })
@@ -119,9 +119,9 @@ app.post("/room", userMiddlewear, async (req, res) => {
 })
 
 
-app.get("/chats/:roomId",async (req,res)=>{
+app.get("/chats/:roomId", async (req, res) => {
 
- try {
+    try {
         const roomId = Number(req.params.roomId);
         console.log(req.params.roomId);
         const messages = await prismaClient.chat.findMany({
@@ -137,36 +137,43 @@ app.get("/chats/:roomId",async (req,res)=>{
         res.json({
             messages
         })
-    } catch(e) {
+    } catch (e) {
         console.log(e);
         res.json({
             messages: []
         })
     }
-    
+
 })
 
-app.get("/room/:slug",async (req,res)=>{
-    const slug=req.params.slug
-    const room=await prismaClient.room.findFirst({
-        where:{
-            slug
+app.get("/room/:slug", async (req, res) => {
+    const slug = req.params.slug
+    console.log(slug, "backend chieking")
+
+    try {
+        const room = await prismaClient.room.findFirst({
+            where: {
+                slug
+            }
+        });
+        console.log(room,"room get");
+        res.json({
+            room
         }
-    })
-    res.json({
-        room
+        )
+    } catch (e) {
+        console.log(e,"error===================================");
     }
-    )
 })
 
 
 
-       
- 
-  
 
-   
-    
+
+
+
+
+
 
 
 

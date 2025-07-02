@@ -1,6 +1,7 @@
 {
   "name": "ws-backend",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
@@ -9,19 +10,20 @@
   },
   "devDependencies": {
     "@repo/backend-common": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@repo/common":"workspace:*",
-    "@repo/db":"workspace:*"
-
+    "@repo/common": "workspace:*",
+    "@repo/pridb": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ws": "^8.18.1",
+    "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
-    "ws": "^8.18.2"
+    "websocketserver": "^1.0.0",
+    "ws": "^8.18.3"
   }
 }

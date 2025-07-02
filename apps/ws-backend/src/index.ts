@@ -4,7 +4,7 @@ import { WebSocketServer,WebSocket } from "ws";
 import {JWT_SECRET} from "@repo/backend-common/config"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { parse } from "path";
-import {prismaClient} from "@repo/db/client"
+import {prismaClient} from "@repo/pridb/client"
 
 //state management usiconst 
 const wss = new WebSocketServer({ port: 8000 })

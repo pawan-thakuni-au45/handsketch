@@ -7,7 +7,7 @@ export function useSocket(){
     const[socket,setSocket]=useState<WebSocket>()
 
     useEffect(()=>{
-        const ws=new WebSocket(`${WS_URL}?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YzhkOTYzNy0xZWJkLTQzNTktYTA0Zi00NjNhNDg5Mzg1ZjciLCJpYXQiOjE3NTEyNzI3MTF9.-dxQ9DpqNFeG29O5Iuh_ioDLPw0e4dOqGo31Tjp_sqU`);
+        const ws=new WebSocket(`${WS_URL}?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0MmExZjdkNC0wYWViLTRlMDgtOGExMi0zNTVjYTE0ZWU1YzYiLCJpYXQiOjE3NTE0MjQwMjJ9.NxyUGbhH8ozqCELEpjIHEyfProsabe6vG8teGS71BDA`);
         ws.onopen=()=>{
             setLoading(false);
             setSocket(ws)
