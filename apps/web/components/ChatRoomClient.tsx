@@ -18,7 +18,7 @@ export function ChatRoomClient({
    
 
     useEffect(()=>{
-        alert("alerting")
+        
         
         if(socket && !loading){
             socket.send(JSON.stringify({
