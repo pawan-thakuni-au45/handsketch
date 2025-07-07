@@ -1,20 +1,36 @@
 import { InitDraw } from "@/draw";
+import { Game } from "@/draw/Game";
 import { Circle, Pencil, RectangleHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ButtonIcons } from "./ButtonIcons";
 
- type Shape="circle" | "rect" | "pencil"
+
+ export type Tool="circle" | "rect" | "pencil"
 export function Canvas({roomId,socket}:{socket:WebSocket,roomId:string}){
      const canvasRef=useRef<HTMLCanvasElement>(null)
+     const [game,setGame]=useState<Game>()
 
-     const [selectedTool,setSelectedtool]=useState<Shape>("circle")
+     const [selectedTool,setSelectedtool]=useState<Tool>("circle")
+
+     //whenever state will change this useEffedt will be called
+     useEffect(()=>{
+        //@ts-ignore
+        game?.setTool(selectedTool) ;//whenerver we want to change the state among many components just put it with "WINDOW"
+
+     },[selectedTool,game])
+
       useEffect(()=>{
+
 
   
   
         if(canvasRef.current){
-          
-InitDraw(canvasRef.current,roomId,socket);
+                const g=new Game(canvasRef.current,roomId,socket)
+                setGame(g)
+           return () => {
+                g.destroy();
+            }
+
 
 
      }
@@ -31,8 +47,8 @@ InitDraw(canvasRef.current,roomId,socket);
 }
 
 function TopBar({selectedTool,setSelectedtool}:{
-        selectedTool:Shape,
-        setSelectedtool:(s:Shape)=>void
+        selectedTool:Tool,
+        setSelectedtool:(s:Tool)=>void
 }){
         return <div style={{
                 position:"fixed",
