@@ -38,7 +38,8 @@ app.post("/signup", async (req, res) => {
             }
         })
         res.json({
-            userId: user.id
+            userId: user.id,
+            message:"user register succesfully"
         })
     } catch (e) {
         res.status(411).json({
@@ -77,7 +78,7 @@ app.post("/signin", async (req, res) => {
     const matchPassword = await bcrypt.compare(parsedData.data?.password, user.password)
     if (!matchPassword) {
         res.json({
-            message: "you hae entered wrong password"
+            message: "you have entered wrong password"
         })
     }
 
@@ -87,7 +88,9 @@ app.post("/signin", async (req, res) => {
     }, JWT_SECRET);
 
     res.json({
-        token
+        token,
+        message:"login succesfully"
+
     })
 })
 
@@ -182,4 +185,4 @@ app.get("/room/:slug", async (req, res) => {
 
 
 
-app.listen(4000)
+app.listen(4001)
