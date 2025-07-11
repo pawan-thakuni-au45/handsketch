@@ -5,7 +5,7 @@ import { signInuser, userCreate, room } from "@repo/common/types"
 import { prismaClient } from "@repo/pridb/client"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { userMiddlewear } from "./usermiddlewear"
+import {usermiddleware } from "./usermiddlewear"
 import cors from "cors"
 
 
@@ -65,6 +65,7 @@ app.post("/signin", async (req, res) => {
 
         where: {
             email: parsedData.data.email,
+           
 
         }
     })
@@ -75,26 +76,31 @@ app.post("/signin", async (req, res) => {
         })
         return;
     }
-    const matchPassword = await bcrypt.compare(parsedData.data?.password, user.password)
+    const matchPassword = await bcrypt.compare(parsedData.data.password, user.password)
+    
     if (!matchPassword) {
         res.json({
             message: "you have entered wrong password"
         })
+        return
     }
 
 
     const token = jwt.sign({
         userId: user?.id
     }, JWT_SECRET);
+    console.log("tokenjwt",token);
 
     res.json({
         token,
-        message:"login succesfully"
+       
+        
 
     })
+    console.log(token,"tokeen")
 })
 
-app.post("/room", userMiddlewear, async (req, res) => {
+app.post("/room", usermiddleware, async (req, res) => {
     const parsedData = room.safeParse(req.body);
     if (!parsedData.success) {
         res.json({
@@ -128,16 +134,19 @@ app.get("/chats/:roomId", async (req, res) => {
 
     try {
         const roomId = Number(req.params.roomId);
-        console.log(req.params.roomId);
+        console.log(roomId,"Rgergergregergergergerg");
         const messages = await prismaClient.chat.findMany({
-            where: {
-                roomId: roomId
+            where:{
+                roomId:roomId
+                    
             },
             orderBy: {
                 id: "desc"
             },
             take: 10000
         });
+        console.log(roomId,"Rgergergregergergergerg");
+
 
         res.json({
             messages

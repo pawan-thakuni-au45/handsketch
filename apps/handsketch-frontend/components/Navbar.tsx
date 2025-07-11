@@ -8,7 +8,7 @@ const Navbar = () => {
     
   return (
     <div className='bg-zinc-900 ' >
-        <ToastContainer/>
+        
 
 
         <nav className='w-full py-6 flex mx-auto items-center gap-x-3 justify-between text-white'>

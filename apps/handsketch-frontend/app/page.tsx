@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 
 
 
@@ -8,7 +9,7 @@ export default function Home() {
   return (
     <div className="text-white bg-amber-400">
       <div>
-        this is my landigng page
+        {/* <Header/> */}
   </div>
     </div>
   );

@@ -2,6 +2,7 @@
 import { BACKEND_URL } from "@/config";
 import axios from "axios";
 import  Link  from "next/Link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -11,6 +12,7 @@ import { toast } from "react-toastify";
         email:"",
         password:""
     })
+    const router=useRouter()
 
     const onChangeHandler=(e:ChangeEvent<HTMLInputElement>)=>{
         setState({...state,[e.target.name]:e.target.value})
@@ -25,18 +27,35 @@ import { toast } from "react-toastify";
         }
 
         try{
-            const response=await axios.post(`${BACKEND_URL}/signup`,state)
-            const data=await response.data
-
-            toast.success(data.message)
+        await axios.post(`${BACKEND_URL}/signup`,state)
+        
+            
+            toast.success("register successfully");
+                router.push("/signin");
+            
+                
+        
             setState({
         name:"",
         email:"",
         password:""
+            
     })
+    
+                
+}
+    
            
-        }catch(err:any){
-            toast.error(err.message)
+ 
+        catch(error:any){
+            
+            //    console.log(error);
+             if (error.response) {
+                
+                toast.error(error.response.data.message);
+            }
+        
+
         }
     }
     return(
